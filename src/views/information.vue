@@ -131,102 +131,73 @@ export default {
 
 <style scoped>
 .profile-container {
-  min-height: 100vh;
   background: #f2f4ff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
+  padding: 20px 40px; /* 增加左右内边距 */
   box-sizing: border-box;
-  /* 确保容器不会受到其他样式影响 */
   width: 100%;
-  margin: 0 auto;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  justify-content: flex-start;
 }
 
 .profile-card {
   width: 100%;
-  max-width: 900px;
+  max-width: 1200px; /* 扩展最大宽度 */
+  min-width: 800px; /* 增加最小宽度 */
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease;
-}
-
-.profile-card:hover {
-  transform: scale(1.02);
+  margin-left: 20px;
 }
 
 .card-title {
-  text-align: center;
-  color: #3a216b;
-  font-size: 28px;
-  margin: 20px 0 40px;
-  position: relative;
-}
-
-.card-title::after {
-  content: '';
-  display: block;
-  width: 80px;
-  height: 3px;
-  background: #3a216b;
-  margin: 12px auto 0;
-  border-radius: 2px;
+  text-align: left;
+  padding-left: 40px; /* 增加标题左侧间距 */
+  margin: 30px 0; /* 增加标题间距 */
+  font-size: 32px; /* 放大标题字号 */
 }
 
 .demo-form {
-  padding: 0 50px 50px;
+  padding: 0 40px 40px; /* 增加表单内边距 */
 }
 
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 120px;
-  height: 120px;
-  line-height: 120px;
-  text-align: center;
+/* 输入项扩展 */
+:deep(.el-form-item__content) {
+  flex: 1;
+  max-width: 800px; /* 输入区域最大宽度 */
 }
 
-.avatar {
-  width: 120px;
-  height: 120px;
-  display: block;
-  border-radius: 50%;
+:deep(.custom-input) {
+  width: 100%;
+  height: 48px; /* 增加输入框高度 */
+  font-size: 16px;
 }
 
-:deep(.el-input__prefix) {
-  left: 12px;
-  font-size: 18px;
-}
-
+/* 按钮放大 */
 .submit-btn {
-  width: 220px;
-  height: 48px;
-  border-radius: 8px;
-  font-size: 18px;
-  transition: all 0.3s;
+  width: 240px;
+  height: 52px;
+  font-size: 20px;
 }
 
-.submit-btn:hover {
-  transform: scale(1.05);
+/* 响应式调整 */
+@media (max-width: 1600px) {
+  .profile-card {
+    margin-left: 10px;
+    min-width: auto;
+  }
+  
+  :deep(.custom-input) {
+    height: 44px;
+  }
 }
 
-.icon {
-  margin-right: 8px;
-  font-size: 18px;
-}
-
-.form-actions {
-  margin-top: 40px;
-  text-align: center;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
+@media (max-width: 1200px) {
+  .profile-container {
+    padding: 20px;
+  }
+  
+  .demo-form {
+    padding: 0 20px 30px;
+  }
 }
 </style>

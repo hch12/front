@@ -7,7 +7,18 @@
         <span style="font-size: 20px; font-weight: bold; color: #f1f1f1; margin-left: 5px">健康档案系统</span>
       </div>
       <div style="flex: 1; display: flex; align-items: center; padding-left: 20px; border-bottom: 1px solid #ddd">
-        用户系统
+        <!-- 动态显示返回按钮和系统标题 -->
+        <template v-if="showBackButton">
+          <el-button 
+            link 
+            @click="goHome"
+            style="margin-right: 10px; color: #3a216b"
+          >
+            <el-icon><ArrowLeft /></el-icon>
+            返回首页
+          </el-button>
+        </template>
+        <span v-else style="font-weight: 500">用户档案管理系统</span>
       </div>
       <div style="width: fit-content; padding-right: 20px; display: flex; align-items: center; border-bottom: 1px solid #ddd">
         <el-dropdown>
@@ -31,7 +42,7 @@
     <div style="display: flex">
       <!--  菜单区域开始 -->
       <div style="width: 240px;">
-        <el-menu router :default-openeds="['1']" :default-active="router.currentRoute.value.path" style="min-height: calc(100vh - 60px)">
+        <el-menu router :default-openeds="[]" :default-active="router.currentRoute.value.path" style="min-height: calc(100vh - 60px)">
           <el-menu-item index="/user/welcome">
             <el-icon><House /></el-icon>
             <span>首页</span>
@@ -39,12 +50,12 @@
 
           <el-sub-menu index="1">
             <template #title>
-              <el-icon><notebook /></el-icon>
+              <el-icon><Notebook /></el-icon>
               <span>档案管理</span>
             </template>
-            <el-menu-item index="/user/relative">亲友档案管理</el-menu-item>
-            <el-menu-item index="/user/personal">个人档案管理</el-menu-item>
-            <el-menu-item index="/user/measure">指标管理</el-menu-item>
+            <el-menu-item index="/user/perArch">个人档案管理</el-menu-item>
+            <el-menu-item index="/user/relaArch">亲友档案管理</el-menu-item>
+            <el-menu-item index="/user/measure">档案上传/指标管理</el-menu-item>
             <el-menu-item index="/user/analysis">纵向指标分析</el-menu-item>
           </el-sub-menu>
           <el-menu-item index="/user/kinship">
@@ -60,13 +71,12 @@
             <el-menu-item index="/user/comb">套餐信息</el-menu-item>
             <el-menu-item index="/user/remark">评论信息</el-menu-item>
           </el-sub-menu>
-
         </el-menu>
       </div>
       <!--  菜单区域结束 -->
 
       <!--  数据渲染区域开始 -->
-      <div style="flex: 1; width: 0; padding: 50px 100px ; background-color: #f2f4ff">
+      <div style="flex: 1; width: 0; padding: 50px 100px ; background-color: #ffe4e1">
         <RouterView />
       </div>
       <!--  数据渲染区域结束 -->
@@ -78,17 +88,40 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
-import router from "@/router/index.js";
+import { ref, onMounted, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import {
+  House,
+  Notebook,
+  Link,
+  Memo,
+  ArrowLeft
+} from '@element-plus/icons-vue';
 
 export default {
   components: {
-    // 如果有未导入的组件，如 House, notebook, Link, Memo 等，需要在这里导入并注册
+    House,
+    Notebook,
+    Link,
+    Memo,
+    ArrowLeft
   },
   setup() {
+    const router = useRouter();
+    const route = useRoute();
     const username = ref('');
 
-    // 生命周期钩子：组件挂载后执行
+    // 显示返回按钮条件
+    const showBackButton = computed(() => {
+      return route.path !== '/user/welcome';
+    });
+
+    // 返回首页方法
+    const goHome = () => {
+      router.push('/user/welcome');
+    };
+
+    // 初始化用户信息
     onMounted(() => {
       const userStr = localStorage.getItem('user');
       if (userStr) {
@@ -96,32 +129,34 @@ export default {
         if (user.id) { // 检查用户是否登录
           username.value = user.username; // 正确赋值
         } else {
-          // 用户信息不完整，跳转登录
           localStorage.removeItem('user');
           router.push('/login');
         }
       } else {
-        // 未登录，跳转登录
         router.push('/login');
       }
     });
 
     // 退出登录逻辑
     const logout = () => {
-      // 移除本地存储的用户信息
       localStorage.removeItem('user');
-      // 使用 router 进行路由跳转
       router.push('/login');
-    }
+    };
+
+    // 跳转个人信息
     const personal = () => {
-      router.push('/user/information')
-    }
-    const change=() =>{
-      router.push('/user/ChangePassword')
-    }
+      router.push('/user/information');
+    };
+
+    // 跳转修改密码
+    const change = () => {
+      router.push('/user/ChangePassword');
+    };
 
     return {
       username,
+      showBackButton,
+      goHome,
       logout,
       personal,
       change,
@@ -133,27 +168,27 @@ export default {
 
 <style>
 .el-menu {
-  background-color: white; /* 菜单背景改为白色 */
+  background-color: white;
   border: none;
 }
 .el-sub-menu__title {
-  background-color: white !important; /* 子菜单标题背景白色 */
-  color: #333 !important; /* 文字黑色 */
+  background-color: white !important;
+  color: #333 !important;
 }
 .el-menu-item {
   height: 50px;
-  color: #333 !important; /* 默认文字黑色 */
-  background-color: white !important; /* 默认背景白色 */
+  color: #333 !important;
+  background-color: white !important;
 }
 .el-menu .is-active {
-  background-color: #e8f5e9 !important; /* 选中项淡绿色背景 */
-  color: #2e7d32 !important; /* 选中项文字深绿色 */
+  background-color: #e8f5e9 !important;
+  color: #2e7d32 !important;
 }
 .el-sub-menu__title:hover {
-  background-color: #f5f5f5 !important; /* 悬停浅灰色 */
+  background-color: #f5f5f5 !important;
 }
 .el-menu-item:not(.is-active):hover {
-  background-color: #f5f5f5 !important; /* 非选中项悬停浅灰色 */
+  background-color: #f5f5f5 !important;
   color: #333 !important;
 }
 .el-dropdown {
@@ -166,7 +201,7 @@ export default {
   padding-left: 48px !important;
 }
 
-/* 图标颜色调整 */
+/* 图标颜色 */
 .el-menu-item .el-icon, .el-sub-menu__title .el-icon {
   color: #333 !important;
 }
@@ -174,8 +209,12 @@ export default {
   color: #2e7d32 !important;
 }
 
-/* 子菜单箭头颜色 */
-.el-sub-menu__title .el-sub-menu__icon-arrow {
-  color: #333 !important;
+/* 返回按钮样式 */
+.el-button--link {
+  padding: 0 8px;
+}
+.el-button--link .el-icon {
+  vertical-align: middle;
+  margin-right: 4px;
 }
 </style>

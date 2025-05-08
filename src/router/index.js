@@ -8,6 +8,12 @@ import user from "@/views/User.vue"
 import welcome from "@/views/welcome.vue";
 import information from "@/views/information.vue"
 import changePassword from "@/views/ChangePassword.vue";
+import personalArchive from "@/views/personalArchive.vue";
+import relativeArchive from "@/views/relativeArchive.vue";
+import instituteInfo from "@/views/institute.vue";
+import instituteDetail from "@/views/instituteDetail.vue";
+import archiveDetail from "@/views/archiveDetail.vue";
+import comb from "@/views/comb.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,11 +34,18 @@ const router = createRouter({
             name: 'user',
             component: user,
             children: [
-                { path: "welcome", name: 'welcome', component: welcome },
+                { path: "welcome", component: welcome },
                 { path: 'information', component: information },
-                {path: "ChangePassword",name: changePassword,component: changePassword}
+                { path: "ChangePassword",component: changePassword},
+                { path: "perArch",component: personalArchive},
+                { path: "relaArch",component: relativeArchive},
+                { path: "institute",component: instituteInfo},
+                { path: '/institute/detail/:id', component: instituteDetail, props: true},
+                { path: '/archive/detail/:id', component: archiveDetail, props: true},
+                { path: "comb",component: comb}
             ]
         },
+        
         { path: '/notFound', component: notfound },
         { path: '/:pathMatch(.*)', redirect: '/notFound' },
     ],

@@ -148,8 +148,8 @@ export default {
         request.post('/user/updatePassword', requestData).then(res => { // 参数修正
           if (res.code === "200") {
             // 修复4：安全更新用户信息
-           localStorage.getItem("user")
-            localStorage.setItem("user", JSON.stringify(res));
+            localStorage.removeItem("user")
+            localStorage.setItem("user", JSON.stringify(res.data || {}));
 
             ElMessage.success({
               message: '密码修改成功',
@@ -172,161 +172,120 @@ export default {
 
 <style scoped>
 .password-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: #f2f4ff; /* 保持背景色统一 */
+  padding: 20px 40px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: calc(100vh - 60px);
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
+  justify-content: flex-start; /* 改为左对齐 */
 }
 
 .password-card {
   width: 100%;
-  max-width: 480px;
-  border-radius: 1.5rem;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: none;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-}
-
-.password-card:hover {
-  transform: translateY(-4px);
+  max-width: 900px; /* 扩大最大宽度 */
+  min-width: 600px; /* 设置最小宽度 */
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  margin-left: 20px; /* 左侧保留间距 */
+  transform-origin: left top;
+  background: white; /* 背景改为纯白 */
 }
 
 .card-header {
-  text-align: center;
-  margin-bottom: 2.5rem;
+  text-align: left; /* 标题左对齐 */
+  padding: 30px 40px 20px;
+  margin-bottom: 0;
 }
 
 .card-title {
-  color: #2d3436;
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
+  justify-content: flex-start; /* 图标文字左对齐 */
+  font-size: 28px; /* 增大字号 */
 }
 
 .title-icon {
-  font-size: 2rem;
-  color: #4a90e2;
+  font-size: 32px;
 }
 
 .card-subtitle {
-  color: #636e72;
-  font-size: 0.9rem;
-  margin: 0;
+  font-size: 14px;
+  color: #666;
+  margin-top: 8px;
 }
 
 .auth-form {
-  padding: 0 1.5rem;
+  padding: 0 40px 40px; /* 增大内边距 */
 }
 
 .form-item {
-  margin-bottom: 1.75rem;
-}
-
-.form-item :deep(.el-form-item__label) {
-  font-weight: 500;
-  color: #2d3436;
-  margin-bottom: 0.5rem;
-  padding: 0;
-}
-
-.custom-input {
-  width: 100%;
-  border-radius: 0.75rem;
-  transition: all 0.3s ease;
+  margin-bottom: 30px; /* 增加表单项间距 */
 }
 
 .custom-input :deep(.el-input__wrapper) {
-  padding: 0.75rem 1.25rem;
-  background: #f8f9fa;
-  box-shadow: 0 0 0 1px #e0e0e0;
-}
-
-.custom-input :deep(.el-input__wrapper:hover),
-.custom-input :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 2px #4a90e2;
-}
-
-.input-icon {
-  font-size: 1.1rem;
-  color: #7f8c8d;
-  margin-right: 0.5rem;
+  height: 48px; /* 增加输入框高度 */
+  font-size: 16px;
+  border-radius: 8px;
 }
 
 .input-hint {
-  font-size: 0.85rem;
-  color: #636e72;
-  margin-top: 0.5rem;
+  font-size: 13px;
+  margin-top: 8px;
 }
 
 .form-actions {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  margin-top: 40px;
+  flex-direction: row; /* 按钮横向排列 */
+  gap: 20px;
 }
 
 .submit-btn {
-  width: 100%;
-  height: 3rem;
-  font-size: 1rem;
-  border-radius: 0.75rem;
-  background: #4a90e2;
-  transition: all 0.3s ease;
-  letter-spacing: 0.5px;
-}
-
-.submit-btn:hover {
-  background: #357abd;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+  width: 200px;
+  height: 52px;
+  font-size: 16px;
+  border-radius: 8px;
 }
 
 .back-btn {
-  width: 100%;
-  height: 3rem;
-  font-size: 1rem;
-  border-radius: 0.75rem;
-  color: #4a90e2;
-  border: 1px solid #4a90e2;
-  background: transparent;
-  transition: all 0.3s ease;
+  width: 120px;
 }
 
-.back-btn:hover {
-  background: rgba(74, 144, 226, 0.1);
-  transform: translateY(-1px);
-}
-
+/* 错误提示优化 */
 .error-message {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #e74c3c;
-  font-size: 0.85rem;
-  margin-top: 0.5rem;
-  padding: 0.25rem 0;
-  animation: shake 0.4s ease;
+  font-size: 13px;
+  padding-left: 28px;
+  position: relative;
 }
 
 .error-icon {
-  font-size: 1rem;
+  position: absolute;
+  left: 0;
+  top: 2px;
 }
 
-.icon {
-  font-size: 1.2rem;
+/* 响应式调整 */
+@media (max-width: 1200px) {
+  .password-card {
+    min-width: auto;
+    margin-left: 10px;
+  }
+  
+  .auth-form {
+    padding: 0 30px 30px;
+  }
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+@media (max-width: 768px) {
+  .password-container {
+    padding: 20px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .submit-btn,
+  .back-btn {
+    width: 100%;
+  }
 }
 </style>
