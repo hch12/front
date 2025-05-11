@@ -14,6 +14,7 @@ import instituteInfo from "@/views/institute.vue";
 import instituteDetail from "@/views/instituteDetail.vue";
 import archiveDetail from "@/views/archiveDetail.vue";
 import comb from "@/views/comb.vue";
+import relativeManagement from "@/views/RelativeManagement.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,7 +43,9 @@ const router = createRouter({
                 { path: "institute",component: instituteInfo},
                 { path: '/institute/detail/:id', component: instituteDetail, props: true},
                 { path: '/archive/detail/:id', component: archiveDetail, props: true},
-                { path: "comb",component: comb}
+                { path: "comb",component: comb},
+                { path: "relaManage",component: relativeManagement}
+
             ]
         },
         

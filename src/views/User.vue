@@ -58,7 +58,7 @@
             <el-menu-item index="/user/measure">档案上传/指标管理</el-menu-item>
             <el-menu-item index="/user/analysis">纵向指标分析</el-menu-item>
           </el-sub-menu>
-          <el-menu-item index="/user/kinship">
+          <el-menu-item index="/user/relaManage">
             <el-icon><Link /></el-icon>
             <span>亲友关系管理</span>
           </el-menu-item>
