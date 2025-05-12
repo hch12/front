@@ -15,6 +15,7 @@ import instituteDetail from "@/views/instituteDetail.vue";
 import archiveDetail from "@/views/archiveDetail.vue";
 import comb from "@/views/comb.vue";
 import relativeManagement from "@/views/RelativeManagement.vue";
+import analysis from "@/views/analysis.vue"
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,8 +45,8 @@ const router = createRouter({
                 { path: '/institute/detail/:id', component: instituteDetail, props: true},
                 { path: '/archive/detail/:id', component: archiveDetail, props: true},
                 { path: "comb",component: comb},
-                { path: "relaManage",component: relativeManagement}
-
+                { path: "relaManage",component: relativeManagement},
+                { path: "analysis",component:analysis}
             ]
         },
         
