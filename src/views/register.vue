@@ -3,7 +3,6 @@
     <div class="wrapper">
       <form @submit.prevent="registerBrungle">
         <h1>注册账号</h1>
-
         <div class="input-box">
           <i class="fas fa-user icon"></i>
           <input
