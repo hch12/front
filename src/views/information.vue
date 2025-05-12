@@ -9,6 +9,15 @@
             label-width="120px"
             class="demo-form"
         >
+          <el-form-item label="用户ID">
+            <el-input
+                v-model="form.id"
+                placeholder="用户ID"
+                class="custom-input"
+                readonly
+            />
+          </el-form-item>
+
           <el-form-item label="用户姓名">
             <el-input
                 v-model="form.name"
