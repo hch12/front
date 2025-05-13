@@ -152,7 +152,9 @@ const formatDate = (date) => {
 // 输入验证
 const validateInput = (indicator) => {
   if (indicator.dataType === 0) {
-    const isValid = !isNaN(editValues[indicator.id]) && editValues[indicator.id] !== ''
+    const value = editValues[indicator.id]
+    // 允许空值，仅在有输入时验证数字格式
+    const isValid = value === '' || (!isNaN(value) && value !== '')
     validationErrors[indicator.id] = !isValid
     return isValid
   }
@@ -189,7 +191,8 @@ const submitChanges = async () => {
   // 验证所有输入
   const invalidItems = originalIndicators.value.filter(indicator => 
     indicator.dataType === 0 && 
-    (isNaN(editValues[indicator.id]) || editValues[indicator.id] === '')
+    editValues[indicator.id] !== '' &&  // 仅验证非空值
+    isNaN(editValues[indicator.id])
   )
 
   if (invalidItems.length > 0) {
