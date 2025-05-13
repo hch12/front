@@ -15,8 +15,9 @@ import instituteDetail from "@/views/instituteDetail.vue";
 import archiveDetail from "@/views/archiveDetail.vue";
 import comb from "@/views/comb.vue";
 import relativeManagement from "@/views/RelativeManagement.vue";
-import serviceDetail from "@/views/ServiceDetail.vue";
 import analysis from "@/views/analysis.vue";
+import measure from '@/views/measure.vue';
+import serviceDetail from "@/views/ServiceDetail.vue";
 import remark from  "@/views/Remark.vue";
 
 const router = createRouter({
@@ -48,8 +49,9 @@ const router = createRouter({
                 { path: '/archive/detail/:id', component: archiveDetail, props: true},
                 { path: "comb",component: comb},
                 { path: "relaManage",component: relativeManagement},
-                { path: "/service/detail",component: serviceDetail},
                 { path: "analysis",component:analysis},
+                { path: "measure",component: measure},
+                { path: "/service/detail",component: serviceDetail},
                 { path: "remark",component: remark}
             ]
         },
