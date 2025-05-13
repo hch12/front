@@ -1,17 +1,34 @@
 <template>
   <div class="indicator-container">
-    <el-select
-        v-model="selectedCategory"
-        placeholder="请选择类别"
-        style="width: 240px; margin-bottom: 20px"
-    >
-      <el-option
-          v-for="category in categories"
-          :key="category.value"
-          :label="category.label"
-          :value="category.value"
-      />
-    </el-select>
+    <div class="form-header">
+      <el-autocomplete
+        v-model="displayName"
+        :fetch-suggestions="queryNameSuggestions"
+        placeholder="请选择体检人"
+        clearable
+        class="search-input"
+        @select="handleNameSelect"
+        @blur="validateNameInput"
+        @clear="handleClearName"
+      >
+        <template #prefix>
+          <el-icon><User /></el-icon>
+        </template>
+      </el-autocomplete>
+      <el-select
+          v-model="selectedCategory"
+          placeholder="请选择类别"
+          style="width: 240px; margin-bottom: 20px"
+      >
+        <el-option
+            v-for="category in categories"
+            :key="category.value"
+            :label="category.label"
+            :value="category.value"
+        />
+      </el-select>
+    </div>
+    
 
     <div v-if="loading" class="loading">加载中...</div>
 
@@ -67,12 +84,16 @@ const categoryIndicatorMap = {
   '血糖': [31]
 }
 
-const selectedCategory = ref('一般检查')
+const selectedCategory = ref('')
 const charts = ref([])
 const chartRefs = ref([])
 const resizeListeners = ref([])
 const loading = ref(false)
 const chartHeight = 320
+
+const displayName = ref('')
+const nameMap = ref({})
+const nameID = ref('')
 
 // 设置图表引用
 function setChartRef(el, index) {
@@ -255,20 +276,11 @@ function fetchDataByCategory(category) {
   const indicatorIds = categoryIndicatorMap[category]
   if (!indicatorIds) return Promise.resolve([])
 
-  const userStr = localStorage.getItem('user')
-  let userId = null
-
-  try {
-    userId = JSON.parse(userStr)?.id
-  } catch (error) {
-    console.error('解析用户数据失败:', error)
-    return Promise.resolve([])
-  }
-
-  if (!userId) {
+  if (!nameID.value) {
     console.error('未找到用户ID')
     return Promise.resolve([])
   }
+  let userId = nameID.value
 
   loading.value = true
 
@@ -298,11 +310,7 @@ watch(selectedCategory, async (newVal) => {
   initCharts()
 }, { immediate: true })
 
-onMounted(async () => {
-  const data = await fetchDataByCategory('一般检查')
-  processChartData(data)
-  initCharts()
-})
+
 
 onUnmounted(() => {
   resizeListeners.value.forEach(listener => {
@@ -313,6 +321,52 @@ onUnmounted(() => {
     chart?.dispose()
   })
 })
+
+const queryNameSuggestions = async (queryString, cb) => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const res = await request.get('/relative/suggest', {
+        params: { 
+          keyword: queryString ,
+          id: user.id
+        }
+      })
+      
+      if (res.code === '200') {
+        const results = res.data.records.map(user => {
+          nameMap.value[user.name] = user.id
+          return { value: user.name, id: user.id }
+        })
+        cb(results)
+      } else {
+        cb([])
+      }
+    } catch (error) {
+      console.error('获取姓名建议失败:', error)
+      cb([])
+    }
+  }
+
+  const handleNameSelect = (item) => {
+    displayName.value = item.value
+    nameID.value = item.id
+  }
+
+  // 验证姓名输入
+  const validateNameInput = () => {
+    if (displayName.value && !nameMap.value[displayName.value]) {
+      ElMessage.warning('请输入有效的亲友姓名')
+      handleClearName()
+    } else if (displayName.value) {
+      nameID.value = nameMap.value[displayName.value]
+    }
+  }
+
+  const handleClearName = () => {
+    displayName.value = ''
+    nameID.value = ''
+    selectedCategory.value = ''
+  }
 </script>
 
 <style scoped>
@@ -384,4 +438,10 @@ onUnmounted(() => {
     width: 100%;
   }
 }
+
+.form-header {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
 </style>

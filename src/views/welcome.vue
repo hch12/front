@@ -41,7 +41,7 @@ const username = ref('');
 const menuItems = [
   { name: '个人档案管理', path: '/user/perArch', icon: Notebook },
   { name: '亲友档案管理', path: '/user/relaArch', icon: Notebook },
-  { name: '档案上传/指标管理', path: '/user/measure', icon: Notebook },
+  { name: '档案上传', path: '/user/measure', icon: Notebook },
   { name: '纵向指标分析', path: '/user/analysis', icon: Notebook },
   { name: '亲友关系管理', path: '/user/relaManage', icon: Link },
   { name: '机构信息', path: '/user/institute', icon: Memo },

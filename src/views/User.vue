@@ -55,7 +55,7 @@
             </template>
             <el-menu-item index="/user/perArch">个人档案管理</el-menu-item>
             <el-menu-item index="/user/relaArch">亲友档案管理</el-menu-item>
-            <el-menu-item index="/user/measure">档案上传/指标管理</el-menu-item>
+            <el-menu-item index="/user/measure">档案上传</el-menu-item>
             <el-menu-item index="/user/analysis">纵向指标分析</el-menu-item>
           </el-sub-menu>
           <el-menu-item index="/user/relaManage">

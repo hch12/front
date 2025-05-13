@@ -241,7 +241,7 @@
   
   // 验证机构输入
   const validateOrgInput = () => {
-    if (displayOrgName.value && !searchParams.orgName) {
+    if (displayOrgName.value != searchParams.orgName) {
       ElMessage.warning('请输入有效的机构名称')
       clearOrgSearch()
     } else if (displayOrgName.value) {
@@ -285,7 +285,7 @@
   
   // 验证套餐输入
   const validateServiceInput = () => {
-    if (displayServiceName.value && !searchParams.serviceName) {
+    if (displayServiceName.value != searchParams.serviceName) {
       ElMessage.warning('请输入有效的套餐名称')
       clearServiceSearch()
     } else if (displayServiceName.value) {
